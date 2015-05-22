@@ -33,5 +33,40 @@ class Tickets extends \_DefaultController {
 		}
 	}
 
+	public function frm($id=null){
+		if(Auth::isAuth()){
+			$ticket=$this->getInstance($id);
+			$categories=DAO::getAll("Categorie");
+			 $statuts = DAO::getAll("Statut");
+			$cat=-1;
+			if($ticket->getCategorie()!=null){
+				$cat=$ticket->GetCategorie()->getId();
+			}
+			$list=Gui::select($categories, $cat,"Sélectionner une catégorie...");
+			$this->loadView("ticket/vAdd",array("ticketTypes" => Tickets::getTypes(),"categories" => $categories,"ticket" => $ticket,"statuts" => $statuts));
+		}else{
+			$this->nonValid();
+		}
+	}
+	public function isValid(){
+		return Auth::isAuth();
+	}
+	public function onInvalidControl(){
+	$this->loadView("main/vHeader",array("infoUser"=>Auth::getInfoUser()));
+	$this->nonValid();
+	$this->loadView("main/vFooter");
+	exit;
+	}
+
+	private static function getTypes() {
+        return ["incident" => "Incident", "demande" => "Demande"];
+        return ["incident" => "Incident", "demande" => "Demande"];
+    }
+	
+	public function nonValid(){
+	echo "<div class=container>";
+	$this->messageDanger("Accès Interdit: Vous devez vous connecter".Auth::getInfoUser());
+	echo "<div>";
+	}
 
 }
