@@ -121,18 +121,27 @@ class _DefaultController extends \BaseController {
 	 * @param int $id
 	 */
 	public function delete($id){
-		try{
-			$object=DAO::getOne($this->model, $id[0]);
-			if($object!==NULL){
-				DAO::delete($object);
-				$msg=new DisplayedMessage($this->model." `{$object->toString()}` supprimé(e)");
-			}else{
-				$msg=new DisplayedMessage($this->model." introuvable","warning");
+		if(Auth::isAdmin()){
+			try{
+				$object=DAO::getOne($this->model, $id[0]);
+				if($object!==NULL){
+					DAO::delete($object);
+					$msg=new DisplayedMessage($this->model." `{$object->toString()}` supprimé(e)");
+				}else{
+					$msg=new DisplayedMessage($this->model." introuvable","warning");
+				}
+			}catch(Exception $e){
+				$msg=new DisplayedMessage("Impossible de supprimer l'instance de ".$this->model,"danger");
 			}
-		}catch(Exception $e){
-			$msg=new DisplayedMessage("Impossible de supprimer l'instance de ".$this->model,"danger");
+			$this->forward(get_class($this),"index",$msg);
+	}else{
+			$this->nonValid();
 		}
-		$this->forward(get_class($this),"index",$msg);
+	}
+	private function nonValid(){
+		echo "<div class='container'>";
+		$this->messageDanger("Accès interdit. Vous devez vous connecter ".Auth::getInfoUser());
+		echo "</div>";
 	}
 	/* (non-PHPdoc)
 	 * @see BaseController::initialize()
