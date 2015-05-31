@@ -12,6 +12,7 @@ class Tickets extends \_DefaultController {
 		$this->model="Ticket";
 	}
 
+
 	public function messages($id){
 		$ticket=DAO::getOne("Ticket", $id[0]);
 		if($ticket!=NULL){
@@ -33,40 +34,56 @@ class Tickets extends \_DefaultController {
 		}
 	}
 
-	public function frm($id=null){
-		if(Auth::isAuth()){
-			$ticket=$this->getInstance($id);
-			$categories=DAO::getAll("Categorie");
-			 $statuts = DAO::getAll("Statut");
-			$cat=-1;
-			if($ticket->getCategorie()!=null){
-				$cat=$ticket->GetCategorie()->getId();
-			}
-			$list=Gui::select($categories, $cat,"Sélectionner une catégorie...");
-			$this->loadView("ticket/vAdd",array("ticketTypes" => Tickets::getTypes(),"categories" => $categories,"ticket" => $ticket,"statuts" => $statuts));
-		}else{
-			$this->nonValid();
-		}
-	}
-	public function isValid(){
-		return Auth::isAuth();
-	}
-	public function onInvalidControl(){
-	$this->loadView("main/vHeader",array("infoUser"=>Auth::getInfoUser()));
-	$this->nonValid();
-	$this->loadView("main/vFooter");
-	exit;
-	}
-
 	private static function getTypes() {
         return ["incident" => "Incident", "demande" => "Demande"];
         return ["incident" => "Incident", "demande" => "Demande"];
     }
 	
-	public function nonValid(){
-	echo "<div class=container>";
-	$this->messageDanger("Accès Interdit: Vous devez vous connecter".Auth::getInfoUser());
-	echo "<div>";
+	protected function setValuesToObject(&$object) {
+		parent::setValuesToObject($object);
+		$object->setUser(Auth::getUser());
+		$categorie=DAO::getOne("Categorie", $_POST["idCategorie"]);
+		$object->setCategorie($categorie);
 	}
-
+	public function frm($id=null){
+		if (Auth::isAuth()){
+			$ticket = $this->getInstance($id);
+			$categories = DAO::getAll("Categorie");
+			$cat = -1;
+			if ($ticket->getCategorie() != null) {
+				$cat = $ticket->getCategorie()->getId();
+			}
+			$list = Gui::select($categories, $cat, "Sélectionnez une catégorie ...");
+			$this->loadView("ticket/vAdd", array("ticket" => $ticket, "listCat" => $list));
+			echo JsUtils::execute("CKEDITOR.replace( 'contenu');");
+		}
+		elseif (Auth::isAdmin()){
+		$ticket = $this->getInstance($id);
+			$categories = DAO::getAll("Categorie");
+			$cat = -1;
+			if ($ticket->getCategorie() != null) {
+				$cat = $ticket->getCategorie()->getId();
+			}
+			$list = Gui::select($categories, $cat, "Sélectionnez une catégorie ...");
+			$this->loadView("ticket/vAdd", array("ticket" => $ticket, "listCat" => $list));
+			echo JsUtils::execute("CKEDITOR.replace( 'contenu');");
+			}
+			else{
+			$this->nonValid();
+		}
+	}
+	public function isValid() {
+		return Auth::isAuth();
+	}
+	public function onInvalidControl () {
+		$this->loadView("main/vHeader", array("infoUser"=>Auth::getInfoUser()));
+		$this->nonValid();
+		$this->loadView("main/vFooter");
+		exit;
+	}
+	private function nonValid(){
+		echo "<div class='container'>";
+		$this->messageDanger("Accès interdit. Vous devez vous connecter".Auth::getInfoUser());
+		echo "</div>";
+	}
 }
