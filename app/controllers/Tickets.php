@@ -12,7 +12,6 @@ class Tickets extends \_DefaultController {
 		$this->model="Ticket";
 	}
 
-
 	public function messages($id){
 		$ticket=DAO::getOne("Ticket", $id[0]);
 		if($ticket!=NULL){
@@ -39,14 +38,8 @@ class Tickets extends \_DefaultController {
         return ["incident" => "Incident", "demande" => "Demande"];
     }
 	
-	protected function setValuesToObject(&$object) {
-		parent::setValuesToObject($object);
-		$object->setUser(Auth::getUser());
-		$categorie=DAO::getOne("Categorie", $_POST["idCategorie"]);
-		$object->setCategorie($categorie);
-	}
 	public function frm($id=null){
-		if (Auth::isAuth()){
+		if(Auth::isAdmin()){
 			$ticket = $this->getInstance($id);
 			$categories = DAO::getAll("Categorie");
 			$cat = -1;
@@ -56,19 +49,7 @@ class Tickets extends \_DefaultController {
 			$list = Gui::select($categories, $cat, "Sélectionnez une catégorie ...");
 			$this->loadView("ticket/vAdd", array("ticket" => $ticket, "listCat" => $list));
 			echo JsUtils::execute("CKEDITOR.replace( 'contenu');");
-		}
-		elseif (Auth::isAdmin()){
-		$ticket = $this->getInstance($id);
-			$categories = DAO::getAll("Categorie");
-			$cat = -1;
-			if ($ticket->getCategorie() != null) {
-				$cat = $ticket->getCategorie()->getId();
-			}
-			$list = Gui::select($categories, $cat, "Sélectionnez une catégorie ...");
-			$this->loadView("ticket/vAdd", array("ticket" => $ticket, "listCat" => $list));
-			echo JsUtils::execute("CKEDITOR.replace( 'contenu');");
-			}
-			else{
+		}else{
 			$this->nonValid();
 		}
 	}
