@@ -45,16 +45,15 @@ class Tickets extends \_DefaultController {
 		$object->setCategorie($categorie);
 	}
 	public function frm($id=null){
-		if (Auth::isAuth()){
+		if(Auth::isAuth()){
 			$ticket = $this->getInstance($id);
 			$categories = DAO::getAll("Categorie");
 			$cat = -1;
 			if ($ticket->getCategorie() != null) {
 				$cat = $ticket->getCategorie()->getId();
 			}
-			$list = Gui::select($categories, $cat, "Sélectionnez une catégorie ...");
-			$this->loadView("ticket/vAdd", array("ticket" => $ticket, "listCat" => $list));
-			echo JsUtils::execute("CKEDITOR.replace( 'contenu');");
+			$list = Gui::select($categories, $cat);
+			$this->loadView("ticket/vAdd", array("ticketTypes" => Tickets::getTypes(),"categories" => $categories,"currentUser" => Auth::getUser()));
 		}
 		else{
 			$this->nonValid();
