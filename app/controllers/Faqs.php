@@ -11,7 +11,6 @@ class Faqs extends \_DefaultController {
 		$this->title="Foire aux questions";
 		$this->model="Faq";
 	}
-
 	/* (non-PHPdoc)
 	 * @see _DefaultController::setValuesToObject()
 	 */
@@ -32,7 +31,8 @@ class Faqs extends \_DefaultController {
 			$list = Gui::select($categories, $cat, "Sélectionnez une catégorie ...");
 			$this->loadView("faq/vAdd", array("article" => $article, "listCat" => $list));
 			echo JsUtils::execute("CKEDITOR.replace( 'contenu');");
-		}else{
+		}
+		else{
 			$this->nonValid();
 		}
 	}
@@ -51,4 +51,3 @@ class Faqs extends \_DefaultController {
 		echo "</div>";
 	}
 }
-

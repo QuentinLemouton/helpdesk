@@ -12,28 +12,6 @@ class Tickets extends \_DefaultController {
 		$this->model="Ticket";
 	}
 
-
-	public function messages($id){
-		$ticket=DAO::getOne("Ticket", $id[0]);
-		if($ticket!=NULL){
-			echo "<h2>".$ticket."</h2>";
-			$messages=DAO::getOneToMany($ticket, "messages");
-			echo "<table class='table table-striped'>";
-			echo "<thead><tr><th>Messages</th></tr></thead>";
-			echo "<tbody>";
-			foreach ($messages as $msg){
-				echo "<tr>";
-				echo "<td title='message' data-content='".htmlentities($msg->getContenu())."' data-container='body' data-toggle='popover' data-placement='bottom'>".$msg->toString()."</td>";
-				echo "</tr>";
-			}
-			echo "</tbody>";
-			echo "</table>";
-			echo JsUtils::execute("$(function () {
-					  $('[data-toggle=\"popover\"]').popover({'trigger':'hover','html':true})
-				})");
-		}
-	}
-
 	private static function getTypes() {
         return ["incident" => "Incident", "demande" => "Demande"];
         return ["incident" => "Incident", "demande" => "Demande"];
@@ -57,18 +35,7 @@ class Tickets extends \_DefaultController {
 			$this->loadView("ticket/vAdd", array("ticket" => $ticket, "listCat" => $list));
 			echo JsUtils::execute("CKEDITOR.replace( 'contenu');");
 		}
-		elseif (Auth::isAdmin()){
-		$ticket = $this->getInstance($id);
-			$categories = DAO::getAll("Categorie");
-			$cat = -1;
-			if ($ticket->getCategorie() != null) {
-				$cat = $ticket->getCategorie()->getId();
-			}
-			$list = Gui::select($categories, $cat, "Sélectionnez une catégorie ...");
-			$this->loadView("ticket/vAdd", array("ticket" => $ticket, "listCat" => $list));
-			echo JsUtils::execute("CKEDITOR.replace( 'contenu');");
-			}
-			else{
+		else{
 			$this->nonValid();
 		}
 	}
