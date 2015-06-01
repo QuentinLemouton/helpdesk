@@ -38,8 +38,14 @@ class Tickets extends \_DefaultController {
         return ["incident" => "Incident", "demande" => "Demande"];
     }
 	
+	protected function setValuesToObject(&$object) {
+		parent::setValuesToObject($object);
+		$object->setUser(Auth::getUser());
+		$categorie=DAO::getOne("Categorie", $_POST["idCategorie"]);
+		$object->setCategorie($categorie);
+	}
 	public function frm($id=null){
-		if(Auth::isAdmin()){
+		if (Auth::isAuth()){
 			$ticket = $this->getInstance($id);
 			$categories = DAO::getAll("Categorie");
 			$cat = -1;
@@ -49,7 +55,8 @@ class Tickets extends \_DefaultController {
 			$list = Gui::select($categories, $cat, "Sélectionnez une catégorie ...");
 			$this->loadView("ticket/vAdd", array("ticket" => $ticket, "listCat" => $list));
 			echo JsUtils::execute("CKEDITOR.replace( 'contenu');");
-		}else{
+		}
+		else{
 			$this->nonValid();
 		}
 	}
