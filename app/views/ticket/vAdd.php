@@ -18,6 +18,7 @@
 	<p> <b>Utilisateur:</b> <br /> <input type="text" size="60px" disabled value="<?php echo Auth::getUser()?>"></p>
 	<p> <b> Date : </b> <br /><input type="text" size="60px" disabled value="<?php echo date('d/m/Y - H:i:s'); ;?>"></p>
 	<p> <b> Statut : </b> <br /><input type="text" size="60px" disabled value="Nouveau"></p>
+	<p> <input name="idStatut" type="text"" hidden value="1"></p>
 </div>
 <div class="form-group">
 	<input type="submit" value="Valider" class="btn btn-default">
