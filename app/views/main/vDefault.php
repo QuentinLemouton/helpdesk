@@ -22,5 +22,9 @@
 			<legend>CkEditor</legend>
 				<a class="btn btn-link" href="defaultc/ckEditorSample">Exemple ckEditor</a>
 		</fieldset>
+		<fieldset>
+			<legend>Tests</legend>
+				<a class="btn btn-default" href="test">Page de tests</a>
+		</fieldset>
 		</div>
 	</div>

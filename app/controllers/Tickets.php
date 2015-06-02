@@ -43,9 +43,11 @@ class Tickets extends \_DefaultController {
 		$object->setUser(Auth::getUser());
 		$categorie=DAO::getOne("Categorie", $_POST["idCategorie"]);
 		$object->setCategorie($categorie);
+		$statut=DAO::getOne("Statut", $_POST["idStatut"]);
+		$object->setStatut($statut);
 	}
 	public function frm($id=null){
-		if(Auth::isAuth()){
+		if (Auth::isAuth()){
 			$ticket = $this->getInstance($id);
 			$categories = DAO::getAll("Categorie");
 			$cat = -1;
@@ -53,7 +55,7 @@ class Tickets extends \_DefaultController {
 				$cat = $ticket->getCategorie()->getId();
 			}
 			$list = Gui::select($categories, $cat);
-			$this->loadView("ticket/vAdd", array("ticketTypes" => Tickets::getTypes(),"categories" => $categories,"currentUser" => Auth::getUser()));
+			$this->loadView("ticket/vAdd", array("ticket" => $ticket, "listCat" => $list));
 		}
 		else{
 			$this->nonValid();
