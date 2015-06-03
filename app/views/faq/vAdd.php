@@ -1,7 +1,6 @@
 <form method="post" action="faqs/update">
 <fieldset>
 <legend>Ajouter/modifier un article</legend>
-<div class="alert alert-info">Article : <?php echo $article->toString()?></div>
 <div class="form-group">
 	<select name="idCategorie" class="form-control">
 	<?php echo $listCat;?>
