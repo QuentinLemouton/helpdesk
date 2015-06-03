@@ -5,10 +5,14 @@ A Helpdesk Application for educational purposes using a micro-framework
 
 # Comment accéder au site ?
 
-Il faut éxécuter xampp-control, et lancer les modules Apache et MySQL. 
+Il faut exécuter xampp-control, et lancer les modules Apache et MySQL. 
+
 On ouvre un navigateur internet et on tape l'adresse : http://127.0.0.1 
+
 Il faut créer la Base de Données, puis on l'importe sur PHPMyAdmin.
+
 Et pour accéder au projet helpdesk, il faut aller à l'adresse  http://127.0.0.1/helpdesk
+
 
 # Objectif du projet :
 

@@ -1,12 +1,5 @@
 <?php
-/**
- * Contrôleur par défaut (défini dans config => documentRoot)
- * @author jcheron
- * @version 1.1
- * @package helpdesk.controllers
- */
 class test extends \BaseController {
-
 	/**
 	 * Affiche la page par défaut du site
 	 * @see BaseController::index()
@@ -38,7 +31,6 @@ class test extends \BaseController {
 		);
 		$this->index();
 	}
-
 	/**
 	 * Déconnecte l'utilisateur actuel
 	 */
